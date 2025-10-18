@@ -26,7 +26,7 @@
          strcpy((*bp)->word, word);
          (*bp)->freq = 1;
          (*bp)->reflen = 1;
-         (*bp)->refs = malloc(sizeof(int));
+         (*bp)->refs = malloc(sizeof(unsigned int));
          (*bp)->refs[0] = line;
          (*bp)->left = NULL;
          (*bp)->right = NULL;
@@ -37,7 +37,7 @@
       if (strcasecmp(word, (*bp)->word) == 0) {
          (*bp)->freq++;
          (*bp)->reflen++;
-         (*bp)->refs = realloc((*bp)->refs, (*bp)->reflen * sizeof(int));
+         (*bp)->refs = realloc((*bp)->refs, (*bp)->reflen * sizeof(unsigned int));
          (*bp)->refs[(*bp)->reflen - 1] = line;
       }
       else if (strcasecmp(word, (*bp)->word) < 0) {
@@ -51,9 +51,35 @@
    }
 
    /**
-   * bst_traverse() -- recursively traverse the tree and prints outs its contents on a single line in the format:
+   * bst_traverse() -- performs an recursive in-order traversal of the tree and prints out the contents of the tree in the format:
    * word (Freq): ref1, ref2, ...
    * @param root - a pointer to the first node in the tree 
    */
-   //void bst_traverse(const bstnode_t *root) {}
-    
+void bst_traverse(const bstnode_t *root) {
+   if ( root == NULL ){
+      return;
+   }
+
+   bst_traverse(root->left);
+   printf("%s (%u): ", root->word, root->freq);
+   if(root->reflen > 0 ){
+      printf("%u", root->refs[0]);
+
+      for(unsigned int i = 1; i < root->reflen; i++){
+         printf(", %u", root->refs[i]);
+      }
+   }
+   printf("/n");
+
+   bst_traverse(root->right);
+}
+
+
+
+/** 
+* bst_cleanup() -- recursively clean up the tree 
+* @param root - a pointer to the root node of the tree to clean up 
+*/
+void bst_cleanup(bstnode_t *root) {
+   return;
+}
